@@ -63,19 +63,19 @@ The node of type "Annotation" does not have a clear correspondence with the elem
 
 The XML file contains information about a specific protein and is composed of various elements, including:
 
-# entry: 
+entry: 
 the root element of the document that contains all the information about the protein
-# accession: 
+accession: 
 the protein's accession number
-# name: 
+name: 
 the protein's name
-# protein: 
+protein: 
 information about the protein, such as its description, function, and molecular weight
-# gene: 
+gene: 
 information about the gene that encodes the protein, such as its name and location
-# organism: 
+organism: 
 information about the organism from which the protein is derived, such as its scientific name and taxonomy
-# dbReference: 
+dbReference: 
 cross-references to other databases that contain information related to the protein, such as its three-dimensional structure and amino acid sequence.
 
 
