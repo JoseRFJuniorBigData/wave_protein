@@ -1,7 +1,7 @@
 # wave_protein
 
 
-This Python script performs the following tasks:
+# This Python script performs the following tasks:
 
 1 - Imports necessary libraries and modules, such as os, requests, BeautifulSoup, airflow, and Neo4jConnection.
 
@@ -55,7 +55,8 @@ information about the organism from which the protein is derived, such as its sc
 # dbReference: 
 cross-references to other databases that contain information related to the protein, such as its three-dimensional structure and amino acid sequence.
 
-Make sure to install the required packages before running the script:
+
+# Make sure to install the required packages before running the script:
 
 Set environment variables in your system:
 
