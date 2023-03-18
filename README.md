@@ -3,7 +3,15 @@
 
 # This Python script performs the following tasks:
 
-1 - Import necessary modules:
+This script is designed to read an XML file containing information about a protein and store that data in a Neo4j graph database. The script first defines a connection to the Neo4j database using the Neo4jConnection class, which reads connection details from environment variables.
+
+The read_xml_and_save_to_neo4j function is then defined, which uses the ElementTree library to parse the XML file and extract the relevant data. Specifically, the function searches for the gene name and GO terms associated with the protein, and stores them in a list. It then uses the Neo4jConnection object to run a Cypher query to create or update nodes in the Neo4j database. The query merges a new Gene node with the given name, and then for each GO term found in the XML file, it merges a new GO_Term node with the given ID and creates a relationship between the Gene node and the GO_Term node using the "HAS_GO_TERM" relationship type.
+
+Finally, a DAG (Directed Acyclic Graph) is defined to run the read_xml_and_save_to_neo4j function as a task using the PythonOperator class. The DAG is scheduled to run once and is not set to catch up on missed runs.
+
+When the script is executed, it first sets the AIRFLOW__CORE__DAGS_FOLDER environment variable to the directory containing the script. It then runs two shell commands to initialize the Airflow database and start the Airflow webserver on port 8080.
+
+1 - Necessary modules:
 
 os: allows you to access operating system functionality.
 datetime: provides classes for working with dates and times.
