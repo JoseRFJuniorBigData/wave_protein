@@ -1,5 +1,6 @@
 # wave_protein
 
+![Example Data Model](./img/example_data_model2.png)
 
 # This Python script performs the following tasks:
 
