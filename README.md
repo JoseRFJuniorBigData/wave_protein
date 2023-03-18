@@ -3,22 +3,37 @@
 
 # This Python script performs the following tasks:
 
-1 - Imports necessary libraries and modules, such as os, requests, BeautifulSoup, airflow, and Neo4jConnection.
+1 - Import necessary modules:
 
-2 - Retrieves the Neo4j connection details (URI, user, and password) from the environment variables and initializes a Neo4jConnection instance.
+os: allows you to access operating system functionality.
+datetime: provides classes for working with dates and times.
+ElementTree from xml.etree: provides a way to parse XML data.
+DAG and PythonOperator from airflow: provide classes for defining and scheduling Airflow tasks.
+Neo4jConnection from neo4j_connection: provides a class for connecting to a Neo4j graph database.
 
-3 - Defines a function called read_xml_and_save_to_neo4j() that does the following:
-a. Downloads an XML file from the UniProt database containing information about a protein with accession number P12345.
-b. Parses the XML file using BeautifulSoup to extract the protein's accession number, name, protein name, and the organism's scientific name.
-c. Uses the Neo4jConnection instance to execute a Cypher query that inserts the protein and organism information into the Neo4j graph database. The query creates a Protein node, an Organism node, and a relationship FOUND_IN between them.
+2 - Define the connection to the Neo4j database by setting the values for uri, user, and password using environment variables.
 
-4 - Defines an Airflow Directed Acyclic Graph (DAG) called "uniprot_to_neo4j" with a description, start date, and scheduling settings.
+3 - Define a function called read_xml_and_save_to_neo4j that:
 
-6 - Creates an Airflow PythonOperator task called "read_uniprot_to_neo4j" that executes the read_xml_and_save_to_neo4j() function.
+Parses an XML file called Q9Y261.xml.
+Finds the gene name and GO terms from the XML file.
+Creates nodes and relationships in the Neo4j database based on the gene name and GO terms.
 
-6 - When the script is run as the main module, it sets the AIRFLOW__CORE__DAGS_FOLDER environment variable to the current script's directory, initializes the Airflow database, and starts the Airflow webserver on port 8080.
+4 - Define a DAG called uniprot_to_neo4j with the following properties:
 
-The script is designed to be used with Airflow, a popular platform for programmatically authoring, scheduling, and monitoring workflows. The main purpose of the script is to download protein information from the UniProt database in XML format, extract relevant data, and store it in a Neo4j graph database.
+description: a string describing the purpose of the DAG.
+start_date: a datetime object indicating the start date of the DAG.
+schedule_interval: a string indicating the schedule interval for the DAG (in this case, set to None to indicate that it will not be scheduled).
+catchup: a boolean indicating whether to backfill DAG runs that were missed while the DAG was inactive.
+
+5 - Define a task called read_uniprot_to_neo4j_task that:
+
+Has a task ID of "read_uniprot_to_neo4j".
+Calls the read_xml_and_save_to_neo4j function.
+Provides context to the function.
+Is associated with the uniprot_to_neo4j DAG.
+
+6 - If the script is executed directly (as opposed to being imported as a module), set the AIRFLOW__CORE__DAGS_FOLDER environment variable to the directory where the script is located, initialize the Airflow database using airflow initdb, and start the Airflow webserver on port 8080 using airflow webserver --port 8080.
 
 # Q9Y261.xml x Model
 
