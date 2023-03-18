@@ -20,16 +20,17 @@ c. Uses the Neo4jConnection instance to execute a Cypher query that inserts the 
 
 The script is designed to be used with Airflow, a popular platform for programmatically authoring, scheduling, and monitoring workflows. The main purpose of the script is to download protein information from the UniProt database in XML format, extract relevant data, and store it in a Neo4j graph database.
 
-This is just a general representation of how the schema structure can be mapped onto a Neo4j graph:
+# Q9Y261.xml 
 
-The root element of the schema, "schema", is represented as a node with the properties "targetNamespace" and "elementFormDefault".
-The "element" elements that define the elements that can appear in an XML document are represented as nodes with the properties "name", "type", "substitutionGroup", "abstract", "nillable", "minOccurs", "maxOccurs" and "default", and an edge leaving the "schema" node for the corresponding element node.
-The "complexType" elements that define complex data types are represented as nodes with the properties "name", "mixed", "abstract", "final", "block", and an edge leaving the "schema" node for the corresponding data type node.
-The "attribute" elements that define attributes for an element are represented as nodes with the properties "name", "type", "use", "default" and "fixed", and an edge leaving the corresponding element node for the corresponding attribute node.
-The "simpleType" elements that define simple data types are represented as nodes with the properties "name", "final" and "restriction", and an edge leaving the "schema" node for the corresponding data type node.
-The "restriction" elements that define restrictions for a data type are represented as nodes with the properties "base", "enumeration", "fractionDigits", "length", "maxExclusive", "maxInclusive", "maxLength", "minExclusive", "minInclusive", "minLength", "pattern", "totalDigits" and "whiteSpace", and an edge leaving the corresponding simple data type node for the corresponding restriction node.
-The "enumeration" elements that define possible values for a restricted data type are represented as nodes with the properties "value" and "id", and an edge leaving the corresponding restriction node for the corresponding enumeration node.
+The XML file contains information about a specific protein and is composed of various elements, including:
 
+entry: the root element of the document that contains all the information about the protein
+accession: the protein's accession number
+name: the protein's name
+protein: information about the protein, such as its description, function, and molecular weight
+gene: information about the gene that encodes the protein, such as its name and location
+organism: information about the organism from which the protein is derived, such as its scientific name and taxonomy
+dbReference: cross-references to other databases that contain information related to the protein, such as its three-dimensional structure and amino acid sequence.
 
 Make sure to install the required packages before running the script:
 

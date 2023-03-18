@@ -1,7 +1,6 @@
 import os
-import requests
 from datetime import datetime
-from bs4 import BeautifulSoup
+from xml.etree import ElementTree as ET
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from neo4j_connection import Neo4jConnection
@@ -14,26 +13,24 @@ neo4j_conn = Neo4jConnection(uri, user, password)
 
 # Read XML and store data in Neo4j
 def read_xml_and_save_to_neo4j(**kwargs):
-    url = "https://www.uniprot.org/uniprot/P12345.xml"
-    response = requests.get(url)
-    content = response.text
-
-    soup = BeautifulSoup(content, "xml")
-    entry = soup.find("entry")
-
-    accession = entry.find("accession").text
-    name = entry.find("name").text
-    protein_name = entry.find("fullName").text
-    organism_name = entry.find("name", {"type": "scientific"}).text
-
-    neo4j_conn.run_query(
-        """
-        MERGE (p:Protein {accession: $accession, name: $name, protein_name: $protein_name})
-        MERGE (o:Organism {name: $organism_name})
-        MERGE (p)-[:FOUND_IN]->(o)
-        """,
-        {"accession": accession, "name": name, "protein_name": protein_name, "organism_name": organism_name}
-    )
+    tree = ET.parse("Q9Y261.xml")
+    root = tree.getroot()
+    gene_name = root.find(".//{http://uniprot.org/uniprot}gene/{http://uniprot.org/uniprot}name").text
+    go_terms = []
+    for db_ref in root.findall(".//{http://uniprot.org/uniprot}dbReference"):
+        if db_ref.get("type") == "GO":
+            go_terms.append(db_ref.get("id"))
+    if go_terms:
+        neo4j_conn.run_query(
+            """
+            MERGE (g:Gene {name: $gene_name})
+            FOREACH (go_term IN $go_terms |
+                MERGE (t:GO_Term {id: go_term})
+                MERGE (g)-[:HAS_GO_TERM]->(t)
+            )
+            """,
+            {"gene_name": gene_name, "go_terms": go_terms}
+        )
 
 # Define the DAG
 dag = DAG(
